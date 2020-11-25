@@ -13,7 +13,7 @@ router.get('/employees', (req, res) => {
         let returnValue = "";
         let self = this;
         if(err){
-            returnValue = self.response.success(rows);
+            returnValue = self.response.failure("Error in getting all Users");
             res.send(returnValue);
             //console.log(err);
         }else
