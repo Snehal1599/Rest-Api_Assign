@@ -5,19 +5,18 @@ const bodyparser = require('body-parser');
 router.use(bodyparser.json());
 const mysqlConnection = require("./database");
 
-this.response = new Response();
+var response = new Response();
 
 //Get all employees
 router.get('/employees', (req, res) => {
     mysqlConnection.query('SELECT * FROM employee',(err, rows, fields)=>{
         let returnValue = "";
-        let self = this;
         if(err){
-            returnValue = self.response.failure("Error in getting all Users");
+            returnValue = response.failure("Error in getting all Users");
             res.send(returnValue);
             //console.log(err);
         }else
-            returnValue = self.response.success(rows);
+            returnValue = response.success(rows);
             res.send(returnValue);
         })
 });
@@ -26,13 +25,12 @@ router.get('/employees', (req, res) => {
 router.get('/employees/:id', (req, res) => {
     mysqlConnection.query('SELECT * FROM employee WHERE ID = ?',[req.params.id],(err, rows, fields)=>{
         let returnValue = "";
-        let self = this;
         if(err){
-            returnValue = self.response.failure("Error in getting User");
+            returnValue = response.failure("Error in getting User");
             res.send(returnValue);
             //console.log(err);
         }else
-            returnValue = self.response.success(rows);
+            returnValue = response.success(rows);
             res.send(returnValue);
         })
 });
@@ -41,13 +39,12 @@ router.get('/employees/:id', (req, res) => {
 router.delete('/employees/:id', (req, res) => {
     mysqlConnection.query('DELETE FROM Employee WHERE ID = ?', [req.params.id], (err, rows, fields) => {
         let returnValue = "";
-        let self = this;
         if (err){
-            returnValue = self.response.failure("Error in deleting User");
+            returnValue = response.failure("Error in deleting User");
             res.send(returnValue);
             //res.send('True');
         }else{
-            returnValue = self.response.success('True');
+            returnValue = response.success('True');
             res.send(returnValue);
             //console.log(err);  
         }
@@ -61,15 +58,14 @@ router.post('/addemployee', (req, res) => {
     CALL EmployeeAddOrEdit(@ID,@FIRSTNAME,@LASTNAME,@ADDRESS,@ORGNAME,@SALARY);";
     mysqlConnection.query(sql, [emp.ID, emp.FIRSTNAME, emp.LASTNAME, emp.ADDRESS,emp.ORGNAME, emp.SALARY], (err, rows, fields) => {
         let returnValue = "";
-        let self = this;
         if (err){
-            returnValue = self.response.failure("Error in inserting User");
+            returnValue = response.failure("Error in inserting User");
             res.send(returnValue);
             //console.log(err);
         }else{
             rows.forEach(element => {
                 if(element.constructor == Array){
-                    returnValue = self.response.success('Inserted employee id : '+element[0].ID);
+                    returnValue = response.success('Inserted employee id : '+element[0].ID);
                     res.send(returnValue);
                     res.end();
                 }
@@ -85,13 +81,12 @@ router.put('/updateemployee', (req, res) => {
     CALL EmployeeAddOrEdit(@ID,@FIRSTNAME,@LASTNAME,@ADDRESS,@ORGNAME,@SALARY);";
     mysqlConnection.query(sql, [emp.ID, emp.FIRSTNAME, emp.LASTNAME, emp.ADDRESS,emp.ORGNAME, emp.SALARY], (err, rows, fields) => {
         let returnValue = "";
-        let self = this;
         if (err){
-            returnValue = self.response.failure("Error in updating User");
+            returnValue = response.failure("Error in updating User");
             res.send(returnValue);
             //console.log(err);
         }else{
-            returnValue = self.response.success(rows);
+            returnValue = response.success(rows);
             res.send(returnValue);
             //res.send('Updated successfully');
         }
